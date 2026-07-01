@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Little Question ❤️</title>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#ff9a9e,#fad0c4);
+    font-family:Arial,sans-serif;
+}
+
+.card{
+    background:white;
+    padding:40px;
+    border-radius:25px;
+    text-align:center;
+    box-shadow:0 15px 35px rgba(0,0,0,.2);
+    position:relative;
+    z-index:2;
+}
+
+h1{
+    color:#ff4f81;
+    margin-bottom:30px;
+}
+
+button{
+    padding:15px 30px;
+    font-size:20px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+#yesBtn{
+    background:#ff4f81;
+    color:white;
+    margin-right:20px;
+}
+
+#noBtn{
+    background:#666;
+    color:white;
+    position:absolute;
+}
+
+.heart{
+    position:fixed;
+    font-size:25px;
+    animation:float 6s linear infinite;
+    pointer-events:none;
+}
+
+@keyframes float{
+    from{
+        transform:translateY(100vh);
+        opacity:1;
+    }
+    to{
+        transform:translateY(-120vh);
+        opacity:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1 id="question">Will you go on a date with me? ❤️</h1>
+
+    <button id="yesBtn">YES 💖</button>
+    <button id="noBtn">NO 😅</button>
+</div>
+
+<script>
+
+const noBtn=document.getElementById("noBtn");
+const yesBtn=document.getElementById("yesBtn");
+const question=document.getElementById("question");
+
+const pop=new Audio("https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3");
+const success=new Audio("https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3");
+
+let attempts=0;
+let yesSize=20;
+
+const messages=[
+"Are you sure? 🥺",
+"Really sure? 😭",
+"I'll bring snacks 🍫",
+"What if I buy you SilverQueen? 🍫",
+"I promise it'll be fun ❤️",
+"Don't break my heart 😢",
+"The NO button is broken 😂"
+];
+
+function moveButton(){
+
+    pop.currentTime=0;
+    pop.play();
+
+    attempts++;
+
+    if(attempts<messages.length){
+        question.innerHTML=messages[attempts];
+    }
+
+    yesSize+=8;
+    yesBtn.style.fontSize=yesSize+"px";
+
+    const x=Math.random()*(window.innerWidth-120);
+    const y=Math.random()*(window.innerHeight-60);
+
+    noBtn.style.left=x+"px";
+    noBtn.style.top=y+"px";
+}
+
+noBtn.addEventListener("mouseover",moveButton);
+noBtn.addEventListener("click",moveButton);
+
+yesBtn.onclick=function(){
+
+success.play();
+
+confetti({
+particleCount:300,
+spread:150,
+origin:{y:0.6}
+});
+
+for(let i=0;i<40;i++){
+setTimeout(createHeart,i*100);
+}
+
+setTimeout(()=>{
+document.body.innerHTML=`
+<div style="height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#ff758c,#ff7eb3);
+color:white;
+font-family:Arial;
+text-align:center;
+padding:20px;">
+
+<div>
+<h1 style="font-size:70px;">🥹❤️</h1>
+
+<h1>YAYYYYY!!</h1>
+
+<h2>I can't wait for our date 💖</h2>
+
+<p>You just made me the happiest person 😊</p>
+
+<p>See you soon ❤️</p>
+
+</div>
+
+</div>
+`;
+
+confetti({
+particleCount:400,
+spread:180
+});
+
+},1200);
+
+}
+
+function createHeart(){
+
+const heart=document.createElement("div");
+
+heart.className="heart";
+
+heart.innerHTML=["❤️","💕","💖","💗","💘"][Math.floor(Math.random()*5)];
+
+heart.style.left=Math.random()*100+"vw";
+
+heart.style.fontSize=(20+Math.random()*30)+"px";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>{
+heart.remove();
+},6000);
+
+}
+
+</script>
+
+</body>
+</html>
